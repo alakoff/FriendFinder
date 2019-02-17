@@ -25,13 +25,31 @@ JSON listing of the current users.
 
 The `Github Repo` link will take you to my Github repository for the application.
 
-![Friend Finder Home Page]('./app/public/images/home.PNG')
+![Friend Finder - Home Page](./app/public/images/home.PNG)
 
 
 ---
 ###  Survey Page
 ---
 
+The Survey page has two main sections; the `About You` secction and the `Survey` section.
+
+![Friend Finder - Survey Page](./app/public/images/survey1.PNG)
+
+
+You must enter your name and a valid link to a photo of yourself.
+You must also answer all ten of the survey questions.
+
+After entering all information, click on the submit button to submit your answers and be matched
+with a new friend.
+
+![Friend Finder - Survey Page](./app/public/images/survey2.PNG)
+
+
+Your match friend will be displayed as a modal message, like the following
+
+
+![Friend Finder - Match](./app/public/images/match.PNG)
 
 
 ---

@@ -70,7 +70,7 @@
                         <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Enter name">
                     </div>
                     <div class="form-group">
-                        <label for="exampleInputPassword1">Link to Photo Image (Required)</label>
+                        <label for="exampleInputPassword1">Link to Photo Image (Required and must start with https://)</label>
                         <input type="text" class="form-control" id="photo" placeholder="Enter link to picture">
                     </div>
             
@@ -283,9 +283,11 @@
 
         // Handle picture validation
         if ($('#photo').val() !== 'Enter link to picture' && $('#photo').val() !== ''){
-            var photo = $("#photo").val().trim();
-        } else {
-            errFlag = 'Y';
+            if ($('#photo').val().slice(0,8) === 'https://'){
+                var photo = $("#photo").val().trim();
+            } else {
+                errFlag = 'Y';
+            }
         }
 
         // Create json object to hold new friend info
@@ -322,7 +324,7 @@
 
         } else {
 
-            alert('All information must be completed');
+            alert('Information is missing or not valid!');
             errFlag = 'N';
         }
  })
