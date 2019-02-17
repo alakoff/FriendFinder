@@ -58,6 +58,7 @@ Your match friend will be displayed as a modal message, like the following
 
 Heroku has been used for the backend hosting for the application.
 
+https://dry-fortress-35210.herokuapp.com/
 
 
 
