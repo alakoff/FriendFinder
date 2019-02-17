@@ -1,20 +1,25 @@
-const path = require('path');
-const htmlRoutes = function(app){
+var path = require('path');
+var htmlRoutes = function(app){
 
 
 // Home route
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/home.html"));
-  });
+// Catch All route
+
 
 // Survey route
 app.get("/survey", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/survey.html"));
+    res.sendFile(path.join(__dirname, "../public/survey.html"));
   });
 
-// Catch All route
-app.use('', (req, res) => {
-  res.sendFile(path.join(__dirname, "/public/home.html"));
+// Home route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/home.html"));
+});
+
+
+// Catch all route back to the home page
+app.use('*', (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/home.html"));
 });
 
 }

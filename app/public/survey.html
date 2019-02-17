@@ -5,16 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>FriendFinder</title>
 
+ 
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-  <!-- Latest compiled and minified CSS & JS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <script src="https://code.jquery.com/jquery.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>  
-   
-  <!-- Custome CSS Style sheet -->
-  <link rel="stylesheet" type='text/css' href='/css/style.css'>
+    <!-- Custome CSS Style sheet -->
+    <link rel="stylesheet" type='text/css' href='/css/style.css'>
 
 </head>
 
@@ -22,30 +22,64 @@
 <div class="container">
     <div class="jumbotron">
         <img class='logo' src='/images/friends.jpg' height=150 width=150 alt="Friends">
+
         <h1>Friend Finder Survey</h1>
-        <h3>Be sure to answer all of the questions.</h3>
+        <h3>Be sure to enter your name and photo link, in the "About You" section and then, answer all of the Questions.</h3>
         <a href="/"><button class="btn btn-primary btn-md"><span class="fa fa-plus"></span> Back to Home</button></a>
         <br>
     </div>
     <div class="row">
 
+
+        <!-- Modal HTML -->
+        <div class="modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"></h5>
+                        <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close"> -->
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        
+                        <p id=matchname></p>
+                        
+                        <div id='matchphoto'>
+                        <!-- PHOTO -->
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    </div>
+                    </div>
+                </div>
+        </div>
+        <!-- End of Modal -->
+
+
         <div class="col-md-12">
             <h4>About You</h4>
    
-            <form>
+            <form  id="friend-form">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Name (Required)</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter name">
+                        <input type="text" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Enter name">
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Link to Photo Image (Required)</label>
-                        <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Enter link to picture">
+                        <input type="text" class="form-control" id="photo" placeholder="Enter link to picture">
                     </div>
-            </form>
+            
         </div>
         <div class="col-md-12">
             <hr>
+
             <!-- Survey Questions Below -->
+            
             <div class="form-group">
 
                 <!-- Question 1 -->
@@ -198,11 +232,102 @@
                     </div>
             </div>
             <br>
-            <button type="button" class="btn btn-primary btn-md btn-block">Submit</button>
+            <button id='submit' type="button" class="btn btn-primary btn-md btn-block">Submit</button>
             <br>
+            </form>
     </div>
     </div>
+    <footer class="footer">
+            <div class="container">
+              <p id="smallfooter"><a href="/api/friends">API Friends List</a> | <a href="https://github.com/alakoff/FriendFinder">Github Repo</a></p>
+            </div>
+          </footer>
     </div>
-    
+
+
+<script>
+
+    function getScores(){
+        
+        var scores = [];
+
+        for (i=1;i<11;i++){
+            if ($('#q'+i).val() !== 'Select Answer ...' && $('#q'+i).val() !== ''){
+                scores.push($("#q"+i).val().slice(0,1).trim());
+            } else {         
+                return scores
+            }
+        }
+        return scores
+    }
+
+
+    // On click listener for submit button to add friend
+    $("#submit").on("click", function(event) {
+        event.preventDefault();
+
+        var errFlag = 'N';
+
+        // Call function to add scores
+        var scores = getScores();
+        if (scores.length !== 10){
+            errFlag = 'Y';
+        }
+        
+        // Handle name validation
+        if ($('#name').val() !== 'Enter name' && $('#name').val() !== ''){
+                var name = $("#name").val().trim();
+            } else {
+                errFlag = 'Y';
+            }
+
+        // Handle picture validation
+        if ($('#photo').val() !== 'Enter link to picture' && $('#photo').val() !== ''){
+            var photo = $("#photo").val().trim();
+        } else {
+            errFlag = 'Y';
+        }
+
+        // Create json object to hold new friend info
+        if (errFlag === 'N') {
+
+            var newFriend = {
+                name: name,
+                photo: photo,
+                scores: scores
+            };
+
+            //Send to new friend object to server
+            $.post("/api/friends", newFriend, function(data) {
+                // console.log("best match", data);
+                name = '';
+                photo = '';
+                scores = [];
+
+                // Show modal
+                $(".modal-title").text('Here is your friend best match !');
+                $("#matchname").text(data.name);
+                $("#matchphoto").html(`<img src="${data.photo}" height=150 width=150 alt='Friend'></img>`);
+                $('.modal').modal('show');
+
+                // Clear form input fields
+                $('#name').val('Enter name');
+                $('#photo').val('Enter link to picture');
+                for (i=1;i<11;i++) {
+                    $("#q"+i).val('Select Answer ...');
+                }
+
+                
+            })
+
+        } else {
+
+            alert('All information must be completed');
+            errFlag = 'N';
+        }
+ })
+
+</script>
+
 </body>
 </html>

@@ -4,19 +4,22 @@ const path = require('path');
 
 
 // Sets up the Express App
-const app = express();
-const PORT = process.env.PORT || 3000;
+var app = express();
+var PORT = process.env.PORT || 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
 //Sets up static app folder for project directory
-app.use(express.static('app'));
+app.use(express.static('app/public'));
 
 
-require(path.join(__dirname, '/routing/htmlRoutes.js'))(app);
-require(path.join(__dirname, '/routing/apiRoutes.js'))(app);
+//Sets up routing for html and api routes
+
+require(path.join(__dirname, './app/routing/apiRoutes'))(app);
+require(path.join(__dirname, './app/routing/htmlRoutes'))(app);
 
 
 // Starts the server to begin listening
